@@ -109,23 +109,23 @@ def register():
             ).fetchone()
 
             content = 'Hello there, to activate your account, please click on this link ' + flask.url_for('auth.activate', _external=True) + '?auth=' + number
-            print(content)
-          
-         
+            contraseña= str(credentials[1])
+            from_email =str(credentials[0])
+
 
             e_mail = EmailMessage()
-            e_mail["From"] = credentials[0]
+            e_mail["From"] = from_email
             e_mail["To"] = email
             e_mail["Subject"] = "Correo de activacion"
-         
             e_mail.set_content(content)
+
             smtp = smtplib.SMTP("smtp-mail.outlook.com", port=587)
             smtp.starttls()
-            smtp.login(credentials[0], credentials[1])
-            smtp.sendmail(credentials[1],email, e_mail.as_string())
-            smtp.quit()
+            smtp.login(from_email, contraseña)
+            smtp.sendmail(from_email, email, e_mail.as_string())
+            smtp.quit()     
             flash('Please check in your registered email to activate your account')
-            return render_template('auth/login.html') 
+            return render_template('auth/login.html')
 
         return render_template('auth/register.html') 
     except:
